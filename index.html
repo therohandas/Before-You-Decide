@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Before You Decide - A student-led space for Indian teenagers to pause, reflect, and feel heard before making academic or career decisions.">
+    <title>Before You Decide | Clarity Before Choice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Cursor Dot (desktop only) -->
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <!-- Cursor Glow Effect -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- Ambient Background -->
+    <div class="ambient">
+        <div class="ambient-layer ambient-layer-1"></div>
+        <div class="ambient-layer ambient-layer-2"></div>
+        <div class="ambient-layer ambient-layer-3"></div>
+    </div>
+
+    <!-- Floating Stars -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1 class="title">
+                <span class="title-word">Before</span>
+                <span class="title-word">You</span>
+                <span class="title-word">Decide</span>
+            </h1>
+            <p class="subtitle reveal-text">
+                A student-led space for Indian teenagers to pause, reflect, and feel heard before making academic or
+                career decisions.
+            </p>
+        </div>
+        <div class="scroll-line">
+            <div class="scroll-dot"></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Why This Exists -->
+        <section class="section" id="why">
+            <div class="section-content">
+                <h2 class="section-heading reveal-line">Why This Exists</h2>
+                <div class="prose">
+                    <p class="reveal-line">
+                        In India, students are expected to make life-shaping decisions at a very young age — often while
+                        feeling <em>overwhelmed</em>, <em>anxious</em>, or <em>unheard</em>.
+                    </p>
+                    <p class="reveal-line highlight">
+                        This project exists because <strong>clarity should come before choice.</strong>
+                    </p>
+                    <p class="reveal-line fade">
+                        And most students are never given that space.
+                    </p>
+                </div>
+            </div>
+            <div class="section-accent"></div>
+        </section>
+
+        <!-- What You Can Do -->
+        <section class="section section-actions" id="participate">
+            <div class="section-content">
+                <h2 class="section-heading reveal-line">What You Can Do</h2>
+                <div class="actions">
+                    <a href="https://purrfect-stocking-744.notion.site/2e76625f1d7880cb814cfafef7463bde?pvs=105"
+                        class="action reveal-line" target="_blank" rel="noopener">
+                        <span class="action-number">01</span>
+                        <div class="action-content">
+                            <h3>Share Your Story</h3>
+                            <p>Share your experience anonymously to help others feel less alone while making similar
+                                decisions.</p>
+                        </div>
+                        <span class="action-arrow">→</span>
+                    </a>
+                    <a href="https://purrfect-stocking-744.notion.site/2e76625f1d788075967beb91c98fea95?pvs=105"
+                        class="action reveal-line" target="_blank" rel="noopener">
+                        <span class="action-number">02</span>
+                        <div class="action-content">
+                            <h3>Check In With Yourself</h3>
+                            <p>A quiet, private space to pause and reflect before making a decision.</p>
+                        </div>
+                        <span class="action-arrow">→</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ethics & Safety -->
+        <section class="section section-safety" id="safety">
+            <div class="section-content">
+                <h2 class="section-heading reveal-line">Ethics & Safety</h2>
+                <div class="prose">
+                    <p class="reveal-line">
+                        This is not a counselling or medical service.<br>
+                        It does not provide professional advice.
+                    </p>
+                    <p class="reveal-line warning">
+                        If you are experiencing severe distress, please reach out to a trusted adult or a local
+                        helpline.
+                    </p>
+                </div>
+                <div class="helplines reveal-line">
+                    <a href="tel:1800-599-0019" class="helpline">
+                        <span class="helpline-name">Kiran</span>
+                        <span class="helpline-number">1800-599-0019</span>
+                    </a>
+                    <span class="helpline-divider">·</span>
+                    <a href="tel:91-9820466726" class="helpline">
+                        <span class="helpline-name">AASRA</span>
+                        <span class="helpline-number">91-9820466726</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Who's Behind This -->
+        <section class="section section-about" id="about">
+            <div class="section-content">
+                <h2 class="section-heading reveal-line">Who's Behind This</h2>
+                <div class="prose">
+                    <p class="reveal-line large">
+                        This initiative was started by a student who experienced first-hand how emotionally heavy
+                        academic decisions can feel.
+                    </p>
+                    <p class="reveal-line signature">
+                        Built slowly, ethically, and with care.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <span>Before You Decide</span>
+        <span class="footer-year">© 2025</span>
+    </footer>
+
+    <script>
+        // Cursor dot and glow - only on desktop
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorGlow = document.getElementById('cursorGlow');
+        const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+        if (!isTouch) {
+            let mouseX = 0, mouseY = 0;
+            let dotX = 0, dotY = 0;
+            let glowX = 0, glowY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // Smooth cursor animation
+            function animateCursor() {
+                // Dot follows quickly
+                dotX += (mouseX - dotX) * 0.2;
+                dotY += (mouseY - dotY) * 0.2;
+                cursorDot.style.left = dotX + 'px';
+                cursorDot.style.top = dotY + 'px';
+
+                // Glow follows slowly
+                glowX += (mouseX - glowX) * 0.08;
+                glowY += (mouseY - glowY) * 0.08;
+                cursorGlow.style.transform = `translate(${glowX - 200}px, ${glowY - 200}px)`;
+
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // Hover effect on interactive elements
+            const hoverables = document.querySelectorAll('a, button');
+            hoverables.forEach(el => {
+                el.addEventListener('mouseenter', () => cursorDot.classList.add('hovering'));
+                el.addEventListener('mouseleave', () => cursorDot.classList.remove('hovering'));
+            });
+        }
+
+        // Generate stars
+        const starsContainer = document.getElementById('stars');
+        const starCount = isTouch ? 30 : 50; // Fewer stars on mobile for performance
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 5 + 's';
+            star.style.animationDuration = (3 + Math.random() * 4) + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Reveal animations on scroll
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('revealed');
+                    }, index * 80);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-line').forEach(el => observer.observe(el));
+
+        // Hero title animation
+        document.querySelectorAll('.title-word').forEach((word, i) => {
+            word.style.animationDelay = `${0.2 + i * 0.12}s`;
+        });
+    </script>
+</body>
+
+</html>
