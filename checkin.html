@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A quiet, private space to pause and reflect before making a decision.">
+    <title>Pause for a Moment | Before You Decide</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .back-link {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+            transform: translateX(-5px);
+        }
+
+        .form-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .form-header {
+            text-align: center;
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .form-emoji {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            animation: gentle-float 4s ease-in-out infinite;
+        }
+
+        @keyframes gentle-float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .form-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .form-intro {
+            color: var(--text-dim);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .reflection-form {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .form-group {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .form-group.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .form-label {
+            display: block;
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .form-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.75rem;
+            height: 1.75rem;
+            background: rgba(196, 181, 253, 0.1);
+            border-radius: 50%;
+            color: var(--accent);
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-right: 0.75rem;
+        }
+
+        .optional-tag {
+            font-size: 0.8rem;
+            color: var(--text-faint);
+            font-family: var(--font-sans);
+            font-weight: 400;
+            margin-left: 0.5rem;
+        }
+
+        .input-short,
+        .input-long {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            color: var(--text);
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: none;
+        }
+
+        .input-short:focus,
+        .input-long:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(196, 181, 253, 0.05);
+        }
+
+        .input-short::placeholder,
+        .input-long::placeholder {
+            color: var(--text-faint);
+        }
+
+        .input-long {
+            min-height: 120px;
+        }
+
+        /* Scale slider */
+        .scale-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .scale-options {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+
+        .scale-option {
+            flex: 1;
+            text-align: center;
+            min-width: 60px;
+        }
+
+        .scale-option input {
+            display: none;
+        }
+
+        .scale-option label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 0.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .scale-option label:hover {
+            background: rgba(196, 181, 253, 0.05);
+            border-color: rgba(196, 181, 253, 0.2);
+        }
+
+        .scale-option input:checked+label {
+            background: rgba(196, 181, 253, 0.15);
+            border-color: var(--accent);
+        }
+
+        .scale-number {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .scale-text {
+            font-size: 0.7rem;
+            color: var(--text-faint);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            min-height: 1em;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(196, 181, 253, 0.05);
+            border-color: rgba(196, 181, 253, 0.2);
+        }
+
+        .checkbox-item input {
+            display: none;
+        }
+
+        .checkbox-item input:checked+.checkbox-custom {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .checkbox-item input:checked+.checkbox-custom::after {
+            opacity: 1;
+        }
+
+        .checkbox-item input:checked~.checkbox-text {
+            color: var(--text);
+        }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            position: relative;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .checkbox-custom::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--bg);
+            font-size: 0.75rem;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .checkbox-text {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            background: linear-gradient(135deg, rgba(196, 181, 253, 0.2) 0%, rgba(196, 181, 253, 0.1) 100%);
+            border: 1px solid rgba(196, 181, 253, 0.3);
+            border-radius: 12px;
+            color: var(--accent);
+            font-family: var(--font-sans);
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, rgba(196, 181, 253, 0.3) 0%, rgba(196, 181, 253, 0.15) 100%);
+            border-color: rgba(196, 181, 253, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .completion-message {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            display: none;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .completion-message.show {
+            display: block;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .completion-icon {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .completion-text {
+            font-family: var(--font-serif);
+            font-size: 1.15rem;
+            color: var(--text);
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .completion-warning {
+            color: var(--accent-warm);
+            font-size: 0.9rem;
+            line-height: 1.7;
+            padding: 1rem;
+            background: rgba(252, 211, 77, 0.05);
+            border: 1px solid rgba(252, 211, 77, 0.2);
+            border-radius: 10px;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .back-link {
+                top: 1rem;
+                left: 1rem;
+            }
+
+            .form-container {
+                padding: 5rem 1.25rem 3rem;
+            }
+
+            .form-emoji {
+                font-size: 2.5rem;
+            }
+
+            .form-title {
+                font-size: 1.75rem;
+            }
+
+            .form-label {
+                font-size: 1.1rem;
+            }
+
+            .checkbox-item {
+                padding: 1rem;
+            }
+
+            .completion-message {
+                padding: 2rem 1.5rem;
+            }
+
+            .scale-option label {
+                padding: 0.75rem 0.25rem;
+            }
+
+            .scale-number {
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-glow" id="cursorGlow"></div>
+    <div class="ambient">
+        <div class="ambient-layer ambient-layer-1"></div>
+        <div class="ambient-layer ambient-layer-2"></div>
+        <div class="ambient-layer ambient-layer-3"></div>
+    </div>
+    <div class="stars" id="stars"></div>
+
+    <a href="index.html" class="back-link"><span>←</span><span>Back</span></a>
+
+    <main class="form-container">
+        <header class="form-header">
+            <span class="form-emoji">🌙</span>
+            <h1 class="form-title">Pause for a Moment</h1>
+            <p class="form-intro">
+                A quiet space to check in with yourself when things feel heavy.
+            </p>
+        </header>
+
+        <form class="reflection-form" id="checkinForm">
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="form-number">1</span>
+                    How heavy does everything feel right now?
+                </label>
+                <div class="scale-container">
+                    <div class="scale-options">
+                        <div class="scale-option">
+                            <input type="radio" name="heaviness" id="scale1" value="1" required>
+                            <label for="scale1">
+                                <span class="scale-number">1</span>
+                                <span class="scale-text">Light</span>
+                            </label>
+                        </div>
+                        <div class="scale-option">
+                            <input type="radio" name="heaviness" id="scale2" value="2">
+                            <label for="scale2">
+                                <span class="scale-number">2</span>
+                                <span class="scale-text"></span>
+                            </label>
+                        </div>
+                        <div class="scale-option">
+                            <input type="radio" name="heaviness" id="scale3" value="3">
+                            <label for="scale3">
+                                <span class="scale-number">3</span>
+                                <span class="scale-text">Medium</span>
+                            </label>
+                        </div>
+                        <div class="scale-option">
+                            <input type="radio" name="heaviness" id="scale4" value="4">
+                            <label for="scale4">
+                                <span class="scale-number">4</span>
+                                <span class="scale-text"></span>
+                            </label>
+                        </div>
+                        <div class="scale-option">
+                            <input type="radio" name="heaviness" id="scale5" value="5">
+                            <label for="scale5">
+                                <span class="scale-number">5</span>
+                                <span class="scale-text">Heavy</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="form-number">2</span>
+                    One word for how you're feeling at the moment
+                </label>
+                <input type="text" class="input-short" id="q2" placeholder="Just one word..." required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="form-number">3</span>
+                    What's making things feel heavy right now?
+                </label>
+                <textarea class="input-long" id="q3" placeholder="Let it out..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="form-number">4</span>
+                    Do you feel like writing this out helped you pause a little?
+                </label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="radio" name="helped" value="Yes" required>
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">Yes</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="radio" name="helped" value="Not sure">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">Not sure</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="radio" name="helped" value="No">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">No</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="form-number">5</span>
+                    Is there anything else you want to get off your chest?
+                    <span class="optional-tag">(Optional)</span>
+                </label>
+                <textarea class="input-long" id="q5" placeholder="This space is for you..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="submit-btn" id="submitBtn">I've Paused</button>
+            </div>
+        </form>
+
+        <div class="completion-message" id="completionMessage">
+            <div class="completion-icon">🌿</div>
+            <p class="completion-text">
+                Thank you for taking this pause.<br>
+                Even a short moment of reflection can help.
+            </p>
+            <div class="completion-warning">
+                <strong>This is not a medical or counselling service.</strong><br>
+                If you are feeling unsafe or overwhelmed, please reach out to a trusted adult or a local helpline.
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <span>Before You Decide</span>
+        <span class="footer-year">© 2025</span>
+    </footer>
+
+    <script>
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxJ0cBjmHmCPgHtaTWirgjYLSmZaJ8XgthooDz-k0XRE2KT6n_wV_3j5kAe7jOpe1GE/exec';
+
+        const form = document.getElementById('checkinForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const completionMessage = document.getElementById('completionMessage');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const heavinessInput = document.querySelector('input[name="heaviness"]:checked');
+            const helpedInput = document.querySelector('input[name="helped"]:checked');
+
+            const formData = {
+                formType: 'checkin',
+                timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+                heaviness: heavinessInput ? heavinessInput.value : '',
+                oneWord: document.getElementById('q2').value,
+                whatsHeavy: document.getElementById('q3').value,
+                helped: helpedInput ? helpedInput.value : '',
+                anythingElse: document.getElementById('q5').value || 'Not provided'
+            };
+
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                submitBtn.textContent = '✓ Done';
+                form.style.display = 'none';
+                completionMessage.classList.add('show');
+                completionMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } catch (error) {
+                console.error('Error:', error);
+                submitBtn.textContent = 'Try Again';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Cursor, stars, reveal animations
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorGlow = document.getElementById('cursorGlow');
+        const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+        if (!isTouch) {
+            let mouseX = 0, mouseY = 0, dotX = 0, dotY = 0, glowX = 0, glowY = 0;
+            document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+            function animateCursor() {
+                dotX += (mouseX - dotX) * 0.2; dotY += (mouseY - dotY) * 0.2;
+                cursorDot.style.left = dotX + 'px'; cursorDot.style.top = dotY + 'px';
+                glowX += (mouseX - glowX) * 0.08; glowY += (mouseY - glowY) * 0.08;
+                cursorGlow.style.transform = `translate(${glowX - 200}px, ${glowY - 200}px)`;
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+            document.querySelectorAll('a, button, .checkbox-item, .scale-option label, input, textarea').forEach(el => {
+                el.addEventListener('mouseenter', () => cursorDot.classList.add('hovering'));
+                el.addEventListener('mouseleave', () => cursorDot.classList.remove('hovering'));
+            });
+        }
+
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < (isTouch ? 30 : 50); i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 5 + 's';
+            star.style.animationDuration = (3 + Math.random() * 4) + 's';
+            starsContainer.appendChild(star);
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) setTimeout(() => entry.target.classList.add('revealed'), i * 100);
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+        document.querySelectorAll('.form-group').forEach(el => observer.observe(el));
+
+        // Dynamic copyright year
+        document.querySelector('.footer-year').textContent = `© ${new Date().getFullYear()}`;
+    </script>
+</body>
+
+</html>

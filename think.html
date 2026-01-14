@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Think Before You Choose - A guided exercise to help you slow down and understand what's influencing your decision.">
+    <title>Think Before You Choose | Before You Decide</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Inter:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Form-specific styles */
+        .back-link {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--accent);
+            transform: translateX(-5px);
+        }
+
+        .form-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .form-header {
+            text-align: center;
+            max-width: 600px;
+            margin-bottom: 3rem;
+        }
+
+        .form-emoji {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            animation: gentle-float 4s ease-in-out infinite;
+        }
+
+        @keyframes gentle-float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .form-title {
+            font-family: var(--font-serif);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .form-intro {
+            color: var(--text-dim);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        /* Form */
+        .reflection-form {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .form-group {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .form-group.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .form-label {
+            display: block;
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .form-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 1.75rem;
+            height: 1.75rem;
+            background: rgba(196, 181, 253, 0.1);
+            border-radius: 50%;
+            color: var(--accent);
+            font-family: var(--font-sans);
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-right: 0.75rem;
+        }
+
+        /* Inputs */
+        .input-short,
+        .input-long {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            color: var(--text);
+            font-family: var(--font-sans);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: none;
+        }
+
+        .input-short:focus,
+        .input-long:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(196, 181, 253, 0.05);
+        }
+
+        .input-short::placeholder,
+        .input-long::placeholder {
+            color: var(--text-faint);
+        }
+
+        .input-long {
+            min-height: 120px;
+        }
+
+        /* Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(196, 181, 253, 0.05);
+            border-color: rgba(196, 181, 253, 0.2);
+        }
+
+        .checkbox-item input {
+            display: none;
+        }
+
+        .checkbox-item input:checked+.checkbox-custom {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .checkbox-item input:checked+.checkbox-custom::after {
+            opacity: 1;
+        }
+
+        .checkbox-item input:checked~.checkbox-text {
+            color: var(--text);
+        }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            position: relative;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .checkbox-custom::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--bg);
+            font-size: 0.75rem;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .checkbox-text {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        /* Fill-in-blank */
+        .fill-blank {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            line-height: 2;
+        }
+
+        .fill-blank-input {
+            flex: 1;
+            min-width: 150px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.5rem;
+            color: var(--accent);
+            font-family: var(--font-sans);
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .fill-blank-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .fill-blank-input::placeholder {
+            color: var(--text-faint);
+        }
+
+        /* Submit button */
+        .submit-btn {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            background: linear-gradient(135deg, rgba(196, 181, 253, 0.2) 0%, rgba(196, 181, 253, 0.1) 100%);
+            border: 1px solid rgba(196, 181, 253, 0.3);
+            border-radius: 12px;
+            color: var(--accent);
+            font-family: var(--font-sans);
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, rgba(196, 181, 253, 0.3) 0%, rgba(196, 181, 253, 0.15) 100%);
+            border-color: rgba(196, 181, 253, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Completion message */
+        .completion-message {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            display: none;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .completion-message.show {
+            display: block;
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .completion-icon {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .completion-text {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            color: var(--text);
+            line-height: 1.8;
+            margin-bottom: 0.5rem;
+        }
+
+        .completion-subtext {
+            color: var(--accent);
+            font-size: 1rem;
+            font-style: italic;
+        }
+
+        /* Mobile */
+        @media (max-width: 640px) {
+            .back-link {
+                top: 1rem;
+                left: 1rem;
+            }
+
+            .form-container {
+                padding: 5rem 1.25rem 3rem;
+            }
+
+            .form-emoji {
+                font-size: 2.5rem;
+            }
+
+            .form-title {
+                font-size: 1.75rem;
+            }
+
+            .form-label {
+                font-size: 1.1rem;
+            }
+
+            .checkbox-item {
+                padding: 1rem;
+            }
+
+            .completion-message {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Cursor Dot (desktop only) -->
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <!-- Cursor Glow Effect -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- Ambient Background -->
+    <div class="ambient">
+        <div class="ambient-layer ambient-layer-1"></div>
+        <div class="ambient-layer ambient-layer-2"></div>
+        <div class="ambient-layer ambient-layer-3"></div>
+    </div>
+
+    <!-- Floating Stars -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Back Link -->
+    <a href="index.html" class="back-link">
+        <span>←</span>
+        <span>Back</span>
+    </a>
+
+    <!-- Form Content -->
+    <main class="form-container">
+        <header class="form-header">
+            <span class="form-emoji">🧭</span>
+            <h1 class="form-title">Think Before You Choose</h1>
+            <p class="form-intro">
+                Most decisions feel confusing because too many things are influencing us at once.
+            </p>
+            <p class="form-intro" style="margin-top: 1rem; color: var(--text-dim);">
+                This exercise won't tell you what to choose.<br>
+                It helps you understand what's driving your thoughts so you can decide more calmly.
+            </p>
+        </header>
+
+        <form class="reflection-form" id="reflectionForm">
+            <!-- Question 1 -->
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="form-number">1</span>
+                    What decision are you currently trying to make?
+                </label>
+                <input type="text" class="input-short" id="q1" placeholder="Write a brief answer..." required>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="form-number">2</span>
+                    If nobody else's expectations mattered, what would you want to do?
+                </label>
+                <textarea class="input-long" id="q2" placeholder="Take your time..." required></textarea>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="form-number">3</span>
+                    What are you most afraid will happen if you choose wrong?
+                </label>
+                <textarea class="input-long" id="q3" placeholder="Be honest with yourself..." required></textarea>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="form-number">4</span>
+                    Which of these is influencing you the most right now?
+                </label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="influences" value="Fear of failure">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">Fear of failure</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="influences" value="Parents' expectations">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">Parents' expectations</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="influences" value="Marks">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">Marks</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="influences" value="Money">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">Money</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="influences" value="Comparison with others">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">Comparison with others</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="influences" value="I don't know">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">I don't know</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="form-number">5</span>
+                    What part of this decision feels unclear — not scary, but unclear?
+                </label>
+                <textarea class="input-long" id="q5" placeholder="What's confusing or unknown?" required></textarea>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="form-number">6</span>
+                    After writing this out, how do you feel right now?
+                </label>
+                <div class="checkbox-group">
+                    <label class="checkbox-item">
+                        <input type="radio" name="feeling" value="Lighter" required>
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">Lighter</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="radio" name="feeling" value="The same">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">The same</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="radio" name="feeling" value="More confused">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">More confused</span>
+                    </label>
+                    <label class="checkbox-item">
+                        <input type="radio" name="feeling" value="A little clearer">
+                        <span class="checkbox-custom"></span>
+                        <span class="checkbox-text">A little clearer</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="form-group">
+                <label class="form-label">
+                    <span class="form-number">7</span>
+                    One sentence to yourself:
+                </label>
+                <div class="fill-blank">
+                    <span>"If I'm honest, right now I feel</span>
+                    <input type="text" class="fill-blank-input" id="q7" placeholder="___" required>
+                    <span>about this decision."</span>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <button type="submit" class="submit-btn" id="submitBtn">Submit My Reflection</button>
+            </div>
+        </form>
+
+        <!-- Completion Message -->
+        <div class="completion-message" id="completionMessage">
+            <div class="completion-icon">✨</div>
+            <p class="completion-text">You don't need to decide today.</p>
+            <p class="completion-subtext">But thinking clearly before deciding is already progress.</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <span>Before You Decide</span>
+        <span class="footer-year">© 2025</span>
+    </footer>
+
+    <script>
+        // =============================================
+        // GOOGLE SHEETS CONFIGURATION
+        // Replace this URL with your Google Apps Script Web App URL
+        // =============================================
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxJ0cBjmHmCPgHtaTWirgjYLSmZaJ8XgthooDz-k0XRE2KT6n_wV_3j5kAe7jOpe1GE/exec';
+
+        // Form submission
+        const form = document.getElementById('reflectionForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const completionMessage = document.getElementById('completionMessage');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Get all values
+            const q1 = document.getElementById('q1').value;
+            const q2 = document.getElementById('q2').value;
+            const q3 = document.getElementById('q3').value;
+            const q5 = document.getElementById('q5').value;
+            const q7 = document.getElementById('q7').value;
+
+            // Get checkboxes (influences)
+            const influences = Array.from(document.querySelectorAll('input[name="influences"]:checked'))
+                .map(cb => cb.value)
+                .join(', ');
+
+            // Get radio (feeling)
+            const feelingInput = document.querySelector('input[name="feeling"]:checked');
+            const feeling = feelingInput ? feelingInput.value : '';
+
+            // Prepare data
+            const formData = {
+                timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+                decision: q1,
+                wantToDo: q2,
+                fear: q3,
+                influences: influences || 'None selected',
+                unclear: q5,
+                feeling: feeling,
+                honestFeeling: q7
+            };
+
+            // Update button state
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+
+            try {
+                // Send to Google Sheets
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                // Success
+                submitBtn.textContent = '✓ Submitted';
+                form.style.display = 'none';
+                completionMessage.classList.add('show');
+
+                // Scroll to completion message
+                completionMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            } catch (error) {
+                console.error('Error:', error);
+                submitBtn.textContent = 'Try Again';
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Cursor dot and glow - only on desktop
+        const cursorDot = document.getElementById('cursorDot');
+        const cursorGlow = document.getElementById('cursorGlow');
+        const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+        if (!isTouch) {
+            let mouseX = 0, mouseY = 0;
+            let dotX = 0, dotY = 0;
+            let glowX = 0, glowY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            function animateCursor() {
+                dotX += (mouseX - dotX) * 0.2;
+                dotY += (mouseY - dotY) * 0.2;
+                cursorDot.style.left = dotX + 'px';
+                cursorDot.style.top = dotY + 'px';
+
+                glowX += (mouseX - glowX) * 0.08;
+                glowY += (mouseY - glowY) * 0.08;
+                cursorGlow.style.transform = `translate(${glowX - 200}px, ${glowY - 200}px)`;
+
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            const hoverables = document.querySelectorAll('a, button, .checkbox-item, input, textarea');
+            hoverables.forEach(el => {
+                el.addEventListener('mouseenter', () => cursorDot.classList.add('hovering'));
+                el.addEventListener('mouseleave', () => cursorDot.classList.remove('hovering'));
+            });
+        }
+
+        // Generate stars
+        const starsContainer = document.getElementById('stars');
+        const starCount = isTouch ? 30 : 50;
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 5 + 's';
+            star.style.animationDuration = (3 + Math.random() * 4) + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Reveal animations on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -30px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('revealed');
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.form-group').forEach(el => observer.observe(el));
+
+        // Dynamic copyright year
+        document.querySelector('.footer-year').textContent = `© ${new Date().getFullYear()}`;
+    </script>
+</body>
+
+</html>
